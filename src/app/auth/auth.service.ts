@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import { catchError, filter, map, tap } from 'rxjs/operators';
+import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,14 @@ export class AuthService {
     map(([_, userData]) => userData.userData)
   );
 
-  constructor(private auth: OidcSecurityService) {}
+  public userInfo$ = this.user$.pipe(
+    switchMap(() => this.userService.getUserInfo())
+  );
+
+  constructor(
+    private auth: OidcSecurityService,
+    private userService: UserService
+  ) {}
 
   initializeAuth() {
     return this.auth.checkAuth().pipe(
