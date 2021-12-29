@@ -27,7 +27,6 @@ export class AuthService {
   );
 
   constructor(private auth: OidcSecurityService) {}
-  public idTokenPayload = this.auth.getPayloadFromIdToken();
 
   initializeAuth() {
     return this.auth.checkAuth().pipe(
