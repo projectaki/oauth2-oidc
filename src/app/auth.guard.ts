@@ -24,6 +24,7 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
+    console.log('IN GUARD');
     return this.auth.isAuthenticated$.pipe(
       tap((x) => console.log('atuh from guard', x)),
       map(({ isAuthenticated }) => {

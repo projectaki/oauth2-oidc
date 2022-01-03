@@ -8,6 +8,7 @@ import { UserService } from '../user/user.service';
   providedIn: 'root',
 })
 export class AuthService {
+  private user: string = '';
   private readonly isLoading = new BehaviorSubject(true);
   public isLoading$ = this.isLoading.asObservable();
 
@@ -38,12 +39,19 @@ export class AuthService {
 
   initializeAuth() {
     return this.auth.checkAuth().pipe(
+      switchMap((x) => this.auth.userData$),
+      switchMap((x) => this.userService.getUserInfo()),
+      tap((x) => (this.user = 'user is set')),
       tap((x) => this.isLoading.next(false)),
       catchError((err) => {
         this.isLoading.next(false);
         return of('Error logging in: ' + err);
       })
     );
+  }
+
+  getUser() {
+    return this.user;
   }
 
   logout() {

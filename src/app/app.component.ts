@@ -11,9 +11,6 @@ export class AppComponent {
   title = 'oauth2-oidc';
 
   constructor(private auth: AuthService) {}
-  logout() {
-    this.auth.logout().subscribe();
-  }
 
   ngOnInit() {
     this.auth.initializeAuth().subscribe();
