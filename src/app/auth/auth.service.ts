@@ -41,6 +41,7 @@ export class AuthService {
     return this.auth.checkAuth().pipe(
       switchMap((x) => this.auth.userData$),
       switchMap((x) => this.userService.getUserInfo()),
+      tap(() => console.log(this.auth.getAccessToken())),
       tap((x) => (this.user = 'user is set')),
       tap((x) => this.isLoading.next(false)),
       catchError((err) => {
