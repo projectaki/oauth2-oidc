@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import {
+  EventTypes,
+  OidcSecurityService,
+  PublicEventsService,
+} from 'angular-auth-oidc-client';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
 import { UserService } from '../user/user.service';
@@ -34,7 +38,8 @@ export class AuthService {
 
   constructor(
     private auth: OidcSecurityService,
-    private userService: UserService
+    private userService: UserService,
+    private eventService: PublicEventsService
   ) {}
 
   initializeAuth() {
@@ -49,6 +54,16 @@ export class AuthService {
         return of('Error logging in: ' + err);
       })
     );
+  }
+
+  getUserChangedEvent() {
+    return this.eventService
+      .registerForEvents()
+      .pipe(
+        filter(
+          (notification) => notification.type === EventTypes.UserDataChanged
+        )
+      );
   }
 
   getUser() {
