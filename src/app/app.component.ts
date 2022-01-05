@@ -19,5 +19,6 @@ export class AppComponent {
       .subscribe((value) => console.log('user data changed', value));
     // this.auth.user$.subscribe((x) => console.log('user', x));
     // this.auth.userInfo$.subscribe((x) => console.log('userinfo', x));
+    this.auth.loginCallback().subscribe((x) => console.log('EMIT', x));
   }
 }
